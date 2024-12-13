@@ -3,24 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Patient</title>
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/patient_signup.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
 </head>
 <body>
-    <h1>Add a New Patient</h1>
-    <form action="/patient" method="POST">
-        <label for="name">Patient's Name:</label>
-        <input type="text" id="name" name="name" required>
-        <br><br>
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../static/images/cover-removebg-preview.png" alt="Compact Logo">
+        </div>
+    </header>
+    <main class="content">
+        <div class="container">
+            <h1>Add a New Patient</h1>
+            <form action="/patient" method="POST">
+                <label for="name">Patient's Name:</label>
+                <input type="text" id="name" name="name" required>
+                <br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-        
-        <label for="doctors">Doctors (comma-separated):</label>
-        <input type="text" id="doctors" name="doctors">
-        <br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br><br>
 
-        <button type="submit">Add Patient</button>
-    </form>
+                <label for="doctors">Doctors (comma-separated):</label>
+                <input type="text" id="doctors" name="doctors">
+                <br><br>
+
+                <button type="submit">Add Patient</button>
+            </form>
+            <p style="margin-top: 1rem;">
+                Already have an account? 
+                <a href="/patient/login" class="login-link">Login</a>
+            </p>
+        </div>
+    </main>
 </body>
 </html>
