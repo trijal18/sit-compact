@@ -3,22 +3,22 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
-from werkzeug.security import generate_password_hash,check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
 # Configure MongoDB connection
-client = MongoClient("mongodb+srv://trijalvshinde:zh3Lc25IyxEdqVqo@sit-cluster.fns1g.mongodb.net/") 
+client = MongoClient("mongodb+srv://trijalvshinde:zh3Lc25IyxEdqVqo@sit-cluster.fns1g.mongodb.net/")
 # mongo = PyMongo(app)
 
-db = client['sit-compact'] 
-  
-# Create collection named data if it doesn't exist already 
+db = client['sit-compact']
+
+# Create collection named data if it doesn't exist already
 doctor_collection = db['doctors']
 patient_collection = db['patients']
 
-#for doctor login
-@app.route('/doctor_signup',methods=['GET'])
+# For doctor signup
+@app.route('/doctor_signup', methods=['GET'])
 def doctor_signup():
     return render_template("doctor_signup.html")
 
@@ -44,20 +44,6 @@ def add_doctor():
 
     return jsonify({"message": "Doctor added", "id": str(doctor_id)}), 201
 
-# @app.route('/doctor', methods=['POST'])
-# def add_doctor():
-#     data = request.json
-#     if not data.get('name') or not data.get('speciality'):
-#         return jsonify({"error": "Name and Speciality are required"}), 400
-
-#     doctor_id = doctor_collection.insert_one({
-#         "name": data['name'],
-#         "speciality": data['speciality'],
-#         "patients": data.get('patients', [])  # Default to empty array
-#     }).inserted_id
-
-# return jsonify({"message": "Doctor added", "id": str(doctor_id)}), 201
-
 @app.route('/doctor/login', methods=['GET', 'POST'])
 def login_doctor():
     if request.method == 'GET':
@@ -80,15 +66,13 @@ def login_doctor():
 
             # Check if the provided password matches the stored hashed password
             if check_password_hash(doctor['password'], data['password']):
-                return redirect(f'{doctor['_id']}')
-                # return jsonify({"message": "Login successful", "doctor_id": str(doctor['_id'])}), 200
+                return redirect(f"{doctor['_id']}")  # Corrected f-string
             else:
                 return jsonify({"error": "Invalid password"}), 401
 
         except Exception as e:
             # Handle unexpected errors
             return jsonify({"error": "An error occurred", "details": str(e)}), 500
-
 
 # GET Endpoint: Get all doctors
 @app.route('/doctor_list', methods=['GET'])
@@ -118,11 +102,8 @@ def get_doctor_by_id(doctor_id):
         # Handle unexpected errors
         return render_template('doctor.html', error=f"An error occurred: {str(e)}"), 500
 
-
-################################################################################################################################################################################################
-
-#for patient login
-@app.route('/patient_signup',methods=['GET'])
+# For patient signup
+@app.route('/patient_signup', methods=['GET'])
 def patient_signup():
     return render_template("patient_signup.html")
 
@@ -146,29 +127,12 @@ def add_patient():
             "doctors": data.get('doctors', "").split(',') if data.get('doctors') else []  # Split doctors by commas
         }).inserted_id
 
-        # Respond with success
-        # return redirect("patient/"+str(patient_id))
         return jsonify({"message": "Patient added", "id": str(patient_id)}), 201
 
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
-    
-# # POST Endpoint: Add a new patient
-# @app.route('/patient', methods=['POST'])
-# def add_patient():
-#     data = request.json
-#     if not data.get('name'):
-#         return jsonify({"error": "Name is required"}), 400
 
-#     patient_id = patient_collection.insert_one({
-#         "name": data['name'],
-#         "doctors": data.get('doctors', [])  # Default to empty array
-#     }).inserted_id
-
-#     return jsonify({"message": "Patient added", "id": str(patient_id)}), 201
-
-# fotr patient login
 @app.route('/patient/login', methods=['GET', 'POST'])
 def login_patient():
     if request.method == 'GET':
@@ -191,8 +155,7 @@ def login_patient():
 
             # Check if the provided password matches the stored hashed password
             if check_password_hash(patient['password'], data['password']):
-                return redirect(f'{patient['_id']}')
-                # return jsonify({"message": "Login successful", "patient_id": str(patient['_id'])}), 200
+                return redirect(f"{patient['_id']}")  # Corrected f-string
             else:
                 return jsonify({"error": "Invalid password"}), 401
 
@@ -220,7 +183,6 @@ def get_patient_by_id(patient_id):
         # Handle unexpected errors
         return render_template('patient.html', error=f"An error occurred: {str(e)}"), 500
 
-
 # GET Endpoint: Get all patients
 @app.route('/patient_list', methods=['GET'])
 def get_patients():
@@ -228,8 +190,6 @@ def get_patients():
     for patient in patients:
         patient["_id"] = str(patient["_id"])  # Convert ObjectId to string
     return jsonify(patients), 200
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

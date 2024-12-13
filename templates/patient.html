@@ -3,34 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .error {
-            color: red;
-        }
-        .patient-details {
-            border: 1px solid #ccc;
-            padding: 20px;
-            width: 50%;
-            margin: auto;
-        }
-    </style>
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/patient.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
 </head>
 <body>
-    <h1>Patient Details</h1>
-
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% else %}
-        <div class="patient-details">
-            <p><strong>ID:</strong> {{ patient._id }}</p>
-            <p><strong>Name:</strong> {{ patient.name }}</p>
-            <p><strong>Doctors:</strong> {{ patient.doctors | join(', ') }}</p>
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../static/images/cover-removebg-preview.png" alt="Compact Logo">
         </div>
-    {% endif %}
+    </header>
+    <main class="content">
+        <div class="container">
+            <h1>Patient Details</h1>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% else %}
+                <div class="patient-details">
+                    <p><strong>ID:</strong> {{ patient._id }}</p>
+                    <p><strong>Name:</strong> {{ patient.name }}</p>
+                    <p><strong>Doctors:</strong> {{ patient.doctors | join(', ') }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
 </body>
 </html>
