@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 
 app = Flask(__name__)
 
@@ -58,6 +58,37 @@ def add_doctor():
 
 # return jsonify({"message": "Doctor added", "id": str(doctor_id)}), 201
 
+@app.route('/doctor/login', methods=['GET', 'POST'])
+def login_doctor():
+    if request.method == 'GET':
+        return render_template("doctor_login.html")
+    
+    if request.method == 'POST':
+        try:
+            # Handle form submission (application/x-www-form-urlencoded)
+            data = request.form.to_dict()
+
+            # Validate required fields
+            if not data.get('name') or not data.get('password'):
+                return jsonify({"error": "Name and Password are required"}), 400
+
+            # Find the doctor by name
+            doctor = doctor_collection.find_one({"name": data['name']})
+
+            if not doctor:
+                return jsonify({"error": "Doctor not found"}), 404
+
+            # Check if the provided password matches the stored hashed password
+            if check_password_hash(doctor['password'], data['password']):
+                return jsonify({"message": "Login successful", "doctor_id": str(doctor['_id'])}), 200
+            else:
+                return jsonify({"error": "Invalid password"}), 401
+
+        except Exception as e:
+            # Handle unexpected errors
+            return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+
 # GET Endpoint: Get all doctors
 @app.route('/doctor_list', methods=['GET'])
 def get_doctors():
@@ -91,7 +122,7 @@ def get_doctor_by_id(doctor_id):
 
 #for patient login
 @app.route('/patient_signup',methods=['GET'])
-def patient_login():
+def patient_signup():
     return render_template("patient_signup.html")
 
 @app.route('/patient', methods=['POST'])
@@ -134,6 +165,37 @@ def add_patient():
 #     }).inserted_id
 
 #     return jsonify({"message": "Patient added", "id": str(patient_id)}), 201
+
+# fotr patient login
+@app.route('/patient/login', methods=['GET', 'POST'])
+def login_patient():
+    if request.method == 'GET':
+        return render_template("patient_login.html")
+    
+    if request.method == 'POST':
+        try:
+            # Handle form submission (application/x-www-form-urlencoded)
+            data = request.form.to_dict()
+
+            # Validate required fields
+            if not data.get('name') or not data.get('password'):
+                return jsonify({"error": "Name and Password are required"}), 400
+
+            # Find the patient by name
+            patient = patient_collection.find_one({"name": data['name']})
+
+            if not patient:
+                return jsonify({"error": "Patient not found"}), 404
+
+            # Check if the provided password matches the stored hashed password
+            if check_password_hash(patient['password'], data['password']):
+                return jsonify({"message": "Login successful", "patient_id": str(patient['_id'])}), 200
+            else:
+                return jsonify({"error": "Invalid password"}), 401
+
+        except Exception as e:
+            # Handle unexpected errors
+            return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
 @app.route('/patient/<patient_id>', methods=['GET'])
 def get_patient_by_id(patient_id):
