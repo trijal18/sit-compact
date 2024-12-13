@@ -27,6 +27,10 @@ db = client['sit-compact']
 doctor_collection = db['doctors']
 patient_collection = db['patients']
 
+@app.route('/',methods=['GET'])
+def doctor_signup():
+    return render_template("index.html")
+
 #for doctor login
 @app.route('/doctor_signup',methods=['GET'])
 def doctor_signup():
@@ -247,7 +251,7 @@ def download():
     return render_template('download_file.html')
 # Route to read a file from Azure Blob Storage
 @app.route('/download_file', methods=['GET'])
-def read_file():
+def download_file():
     file_name = request.args.get('file_name')
 
     if not file_name:
@@ -275,7 +279,7 @@ def upload():
     return render_template('upload_file.html')
 # Route to write a file to Azure Blob Storage
 @app.route('/upload_file', methods=['POST'])
-def write_file():
+def upload_file():
     file_name = request.form.get('file_name')
     file_content = request.form.get('file_content')
 
