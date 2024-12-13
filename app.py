@@ -27,6 +27,10 @@ db = client['sit-compact']
 doctor_collection = db['doctors']
 patient_collection = db['patients']
 
+@app.route('/',methods=['GET'])
+def doctor_signup():
+    return render_template("index.html")
+
 #for doctor login
 @app.route('/doctor_signup',methods=['GET'])
 def doctor_signup():
