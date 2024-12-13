@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
@@ -17,37 +18,31 @@ doctor_collection = db['doctors']
 patient_collection = db['patients']
 
 #for doctor login
-@app.route('/add_doctor',methods=['GET'])
-def doctor_login():
-    return render_template("doctor_login.html")
+@app.route('/doctor_signup',methods=['GET'])
+def doctor_signup():
+    return render_template("doctor_signup.html")
 
 # POST Endpoint: Add a new doctor
 @app.route('/doctor', methods=['POST'])
 def add_doctor():
-    try:
-        if request.is_json:
-            data = request.json  # Handle JSON request
-        else:
-            # Handle form submission (application/x-www-form-urlencoded)
-            data = request.form.to_dict()
+    name = request.form.get('name')
+    speciality = request.form.get('speciality')
+    password = request.form.get('password')
+    patients = request.form.get('patients', '').split(',')
 
-        # Validate required fields
-        if not data.get('name') or not data.get('speciality'):
-            return jsonify({"error": "Name and Speciality are required"}), 400
+    if not name or not speciality or not password:
+        return jsonify({"error": "Name, Speciality, and Password are required"}), 400
 
-        # Insert new doctor into the database
-        doctor_id = doctor_collection.insert_one({
-            "name": data['name'],
-            "speciality": data['speciality'],
-            "patients": data.get('patients', "").split(',') if data.get('patients') else []  # Split patients by commas
-        }).inserted_id
+    hashed_password = generate_password_hash(password, method='scrypt')
 
-        # Respond with success
-        return jsonify({"message": "Doctor added", "id": str(doctor_id)}), 201
+    doctor_id = doctor_collection.insert_one({
+        "name": name,
+        "speciality": speciality,
+        "password": hashed_password,
+        "patients": patients
+    }).inserted_id
 
-    except Exception as e:
-        # Handle unexpected errors
-        return jsonify({"error": "An error occurred", "details": str(e)}), 500
+    return jsonify({"message": "Doctor added", "id": str(doctor_id)}), 201
 
 # @app.route('/doctor', methods=['POST'])
 # def add_doctor():
@@ -95,26 +90,27 @@ def get_doctor_by_id(doctor_id):
 ################################################################################################################################################################################################
 
 #for patient login
-@app.route('/add_patient',methods=['GET'])
+@app.route('/patient_signup',methods=['GET'])
 def patient_login():
-    return render_template("patient_login.html")
+    return render_template("patient_signup.html")
 
 @app.route('/patient', methods=['POST'])
 def add_patient():
     try:
-        if request.is_json:
-            data = request.json  # Handle JSON request
-        else:
-            # Handle form submission (application/x-www-form-urlencoded)
-            data = request.form.to_dict()
+        # Handle form submission (application/x-www-form-urlencoded)
+        data = request.form.to_dict()
 
         # Validate required fields
-        if not data.get('name'):
-            return jsonify({"error": "Name is required"}), 400
+        if not data.get('name') or not data.get('password'):
+            return jsonify({"error": "Name and Password are required"}), 400
+
+        # Hash the password before saving (using sha256 as an example)
+        hashed_password = generate_password_hash(data['password'], method='scrypt')
 
         # Insert new patient into the database
         patient_id = patient_collection.insert_one({
             "name": data['name'],
+            "password": hashed_password,
             "doctors": data.get('doctors', "").split(',') if data.get('doctors') else []  # Split doctors by commas
         }).inserted_id
 
@@ -124,7 +120,7 @@ def add_patient():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
-
+    
 # # POST Endpoint: Add a new patient
 # @app.route('/patient', methods=['POST'])
 # def add_patient():
