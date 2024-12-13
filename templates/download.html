@@ -18,9 +18,8 @@
         <div class="container">
             <h1>Download a File</h1>
             <form method="GET" action="{{ url_for('download') }}">
-                <label for="filename">Enter filename:</label>
-                <input type="text" name="filename" id="filename" required><br><br>
-                <input type="text" name="kry" id="key" required><br><br>
+                <input type="text" name="filename" id="filename" required placeholder="enter file name"><br><br>
+                <input type="text" name="kry" id="key" required placeholder="enter key here"><br><br>
                 <input type="submit" value="Download">
             </form>
             {% if error %}
