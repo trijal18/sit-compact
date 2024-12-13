@@ -9,7 +9,7 @@ def encrypt_file(input_file_path, output_file_path):
         
         # Write the encrypted text and key to the output file
         with open(output_file_path, 'w',encoding='utf-8') as file:
-            file.write(f"{encrypted_text}\n")
+            file.write(encrypted_text)
             # file.write(f"Encryption Key: {key}\n")
         
         return key
@@ -18,7 +18,7 @@ def encrypt_file(input_file_path, output_file_path):
         print(f"Error: {e}")
 
 # Function to decrypt the encrypted text in a file and save the result
-def decrypt_file(input_file_path, output_file_path):
+def decrypt_file(input_file_path, output_file_path, key):
     try:
         with open(input_file_path, 'r') as file:
             lines = file.readlines()  # Read the file content
@@ -31,7 +31,7 @@ def decrypt_file(input_file_path, output_file_path):
         
         # Write the decrypted text to the output file
         with open(output_file_path, 'w') as file:
-            file.write(f"Decrypted Text: {decrypted_text}\n")
+            file.write(decrypted_text)
         
         print(f"File decrypted successfully. Decrypted text written to {output_file_path}")
     except Exception as e:

@@ -55,6 +55,7 @@ def upload():
 @app.route('/download', methods=['GET'])
 def download():
     filename = request.args.get('filename')
+    key=request.args.get('key')
     if not filename:
         error = 'Filename is required'
         return render_template('download.html', error=error)
@@ -62,6 +63,7 @@ def download():
     try:
         #func to decrpt file
         sexy_file=os.path.join(app.config['SEXY_UPLOAD_FOLDER'], filename)
+        #decrypt_file(sexy_file)
         return send_from_directory(app.config['SEXY_UPLOAD_FOLDER'], filename, as_attachment=True)
     except FileNotFoundError:
         error = 'File not found'

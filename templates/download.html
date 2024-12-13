@@ -20,6 +20,7 @@
             <form method="GET" action="{{ url_for('download') }}">
                 <label for="filename">Enter filename:</label>
                 <input type="text" name="filename" id="filename" required><br><br>
+                <input type="text" name="kry" id="key" required><br><br>
                 <input type="submit" value="Download">
             </form>
             {% if error %}
