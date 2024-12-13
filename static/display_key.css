@@ -61,10 +61,10 @@ h1 {
 }
 
 .key {
-    font-size: 4vw;  /* Dynamic font size based on viewport width */
+    font-size: 0.8rem;  /* Dynamic font size based on viewport width */
     color: #007AFF;
     word-wrap: break-word;  /* Ensures the key wraps within the container */
-    line-height: 1.4;  /* Adjust line spacing for better readability */
+    line-height: 1;  /* Adjust line spacing for better readability */
     max-width: 100%;  /* Prevents overflow */
     white-space: normal;  /* Allows wrapping instead of a single line */
     word-break: break-word;  /* Breaks long words if needed */
@@ -74,12 +74,12 @@ h1 {
 .nav-buttons a {
     background: #007AFF;
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.2rem;
     border-radius: 1rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.3s ease;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .nav-buttons a:hover {

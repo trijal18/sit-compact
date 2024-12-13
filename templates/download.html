@@ -19,10 +19,9 @@
             <h1>Download a File</h1>
             <form method="POST" action="{{ url_for('download') }}">
                 <!-- Hidden input to preserve the filename -->
-                <input type="text" name="filename" value="{{ request.args.get('filename', '') }}">
+                <input type="text" name="filename" value="{{ request.args.get('filename', '') }}" placeholder="enter file name">
             
-                <label for="key">Enter Decryption Key:</label>
-                <input type="text" name="key" id="key" required><br><br>
+                <input type="text" name="key" id="key" required placeholder="enter encryption key"><br><br>
             
                 <input type="submit" value="Submit Key">
             </form>
