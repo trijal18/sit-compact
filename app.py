@@ -28,7 +28,7 @@ doctor_collection = db['doctors']
 patient_collection = db['patients']
 
 @app.route('/',methods=['GET'])
-def doctor_signup():
+def home():
     return render_template("index.html")
 
 #for doctor login
