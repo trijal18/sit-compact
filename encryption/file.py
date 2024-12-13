@@ -20,8 +20,8 @@ def encrypt_file(input_file_path, output_file_path):
 # Function to decrypt the encrypted text in a file and save the result
 def decrypt_file(input_file_path, output_file_path, key):
     try:
-        with open(input_file_path, 'r') as file:
-            lines = file.readlines()  # Read the file content
+        with open(input_file_path, 'r',encoding='utf-8') as file:
+            lines = file.read()  # Read the file content
             
             # Extract encrypted text and key from the file
             # encrypted_text = lines[0].replace("Encrypted Text: ", "").strip()
@@ -30,7 +30,7 @@ def decrypt_file(input_file_path, output_file_path, key):
         decrypted_text = decrypt(lines, key)
         
         # Write the decrypted text to the output file
-        with open(output_file_path, 'w') as file:
+        with open(output_file_path, 'w',encoding='utf-8') as file:
             file.write(decrypted_text)
         
         print(f"File decrypted successfully. Decrypted text written to {output_file_path}")

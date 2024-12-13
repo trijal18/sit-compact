@@ -6,13 +6,17 @@ app = Flask(__name__)
 # Set the directory for uploaded files
 OG_UPLOAD_FOLDER = 'og_uploads'
 SEXY_UPLOAD_FOLDER='sexy_uploads'
+OK_UPLOAD_FOLDER='ok_uploads'
 if not os.path.exists(OG_UPLOAD_FOLDER):
     os.makedirs(OG_UPLOAD_FOLDER)
 if not os.path.exists(SEXY_UPLOAD_FOLDER):
     os.makedirs(SEXY_UPLOAD_FOLDER)
+if not os.path.exists(OK_UPLOAD_FOLDER):
+    os.makedirs(OK_UPLOAD_FOLDER)
 
 app.config['OG_UPLOAD_FOLDER'] = OG_UPLOAD_FOLDER
 app.config['SEXY_UPLOAD_FOLDER'] = SEXY_UPLOAD_FOLDER
+app.config['OK_UPLOAD_FOLDER'] = OK_UPLOAD_FOLDER
 app.config['ALLOWED_EXTENSIONS'] = {'txt'}
 
 # Function to check allowed file extensions
@@ -51,23 +55,45 @@ def upload():
             return render_template('upload.html', message=message)
     return render_template('upload.html')
 
-# Route to handle file download
-@app.route('/download', methods=['GET'])
+@app.route('/download', methods=['GET', 'POST'])
 def download():
-    filename = request.args.get('filename')
-    key=request.args.get('key')
-    if not filename:
-        error = 'Filename is required'
-        return render_template('download.html', error=error)
-    
-    try:
-        #func to decrpt file
-        sexy_file=os.path.join(app.config['SEXY_UPLOAD_FOLDER'], filename)
-        #decrypt_file(sexy_file)
-        return send_from_directory(app.config['SEXY_UPLOAD_FOLDER'], filename, as_attachment=True)
-    except FileNotFoundError:
-        error = 'File not found'
-        return render_template('download.html', error=error)
+    error = None
+
+    if request.method == 'GET':
+        filename = request.args.get('filename')
+        if not filename:
+            error = 'Filename is required'
+            return render_template('download.html', error=error)
+
+        # Render form to accept the key
+        return render_template('download.html', filename=filename)
+
+    elif request.method == 'POST':
+        filename = request.form.get('filename')  # Retrieve the filename from hidden input
+        key = request.form.get('key')           # Retrieve the decryption key
+
+        if not key:
+            error = 'Decryption key is required'
+            return render_template('download.html', error=error, filename=filename)
+
+        try:
+            # File paths
+            sexy_file = os.path.join(app.config['SEXY_UPLOAD_FOLDER'], filename)
+            ok_file = os.path.join(app.config['OK_UPLOAD_FOLDER'], filename)
+
+            # Decrypt file
+            decrypt_file(sexy_file, ok_file, key)
+
+            # Serve the decrypted file
+            return send_from_directory(app.config['OK_UPLOAD_FOLDER'], filename, as_attachment=True)
+            # return send_from_directory(app.config['OG_UPLOAD_FOLDER'], filename, as_attachment=True)
+
+        except FileNotFoundError:
+            error = f"File '{filename}' not found."
+        except ValueError as ve:
+            error = str(ve)
+
+        return render_template('download.html', error=error, filename=filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
