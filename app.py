@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -80,7 +80,8 @@ def login_doctor():
 
             # Check if the provided password matches the stored hashed password
             if check_password_hash(doctor['password'], data['password']):
-                return jsonify({"message": "Login successful", "doctor_id": str(doctor['_id'])}), 200
+                return redirect(f'{doctor['_id']}')
+                # return jsonify({"message": "Login successful", "doctor_id": str(doctor['_id'])}), 200
             else:
                 return jsonify({"error": "Invalid password"}), 401
 
@@ -146,6 +147,7 @@ def add_patient():
         }).inserted_id
 
         # Respond with success
+        # return redirect("patient/"+str(patient_id))
         return jsonify({"message": "Patient added", "id": str(patient_id)}), 201
 
     except Exception as e:
@@ -189,7 +191,8 @@ def login_patient():
 
             # Check if the provided password matches the stored hashed password
             if check_password_hash(patient['password'], data['password']):
-                return jsonify({"message": "Login successful", "patient_id": str(patient['_id'])}), 200
+                return redirect(f'{patient['_id']}')
+                # return jsonify({"message": "Login successful", "patient_id": str(patient['_id'])}), 200
             else:
                 return jsonify({"error": "Invalid password"}), 401
 
