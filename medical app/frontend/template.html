@@ -1,0 +1,265 @@
+<html><head><base href="."  /><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureHealth - Patient Records Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+      }
+  
+      body {
+        background: #f2f2f7;
+        color: #1c1c1e;
+      }
+  
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+  
+      .header {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+  
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+  
+      .nav {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+      }
+  
+      .nav-button {
+        background: #007AFF;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+  
+      .nav-button:hover {
+        background: #0056b3;
+      }
+  
+      .drop-zone {
+        width: 100%;
+        height: 300px;
+        border: 2px dashed #007AFF;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: white;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+  
+      .drop-zone.dragover {
+        background: #e3f2fd;
+        border-color: #0056b3;
+      }
+  
+      .form-group {
+        margin-bottom: 20px;
+      }
+  
+      .input {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #dedede;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+      }
+  
+      .input:focus {
+        border-color: #007AFF;
+        box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
+      }
+  
+      .button {
+        background: #007AFF;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+  
+      .button:hover {
+        background: #0056b3;
+      }
+  
+      .file-list {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+  
+      .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #dedede;
+      }
+  
+      .file-item:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <rect x="5" y="5" width="30" height="30" rx="8" fill="#007AFF"/>
+            <path d="M20 12v16M12 20h16" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <h1>SecureHealth</h1>
+        </div>
+        <nav class="nav">
+          <a href="#upload" class="nav-button">Upload Records</a>
+          <a href="#download" class="nav-button">Download Records</a>
+        </nav>
+      </header>
+  
+      <section id="upload" class="section">
+        <div class="drop-zone" id="dropZone">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <path d="M32 8v36M18 28l14-14l14 14" stroke="#007AFF" stroke-width="4" stroke-linecap="round"/>
+            <path d="M16 44h32" stroke="#007AFF" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <p>Drag and drop files here or click to upload</p>
+        </div>
+  
+        <div class="form-group">
+          <input type="text" class="input" id="patientId" placeholder="Enter Patient ID">
+        </div>
+  
+        <button class="button" id="uploadButton">Encrypt and Upload</button>
+      </section>
+  
+      <section id="download" class="section">
+        <div class="form-group">
+          <input type="text" class="input" id="downloadPatientId" placeholder="Enter Patient ID to Download Records">
+        </div>
+  
+        <button class="button" id="downloadButton">Download Records</button>
+  
+        <div class="file-list" id="fileList">
+          <!-- Files will be listed here -->
+        </div>
+      </section>
+    </div>
+  
+    <script>
+      const dropZone = document.getElementById('dropZone');
+      const patientId = document.getElementById('patientId');
+      const uploadButton = document.getElementById('uploadButton');
+      const downloadButton = document.getElementById('downloadButton');
+      const fileList = document.getElementById('fileList');
+      
+      // Simulated database
+      let filesDatabase = {};
+  
+      // Drag and drop handlers
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+  
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+      });
+  
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        handleFiles(files);
+      });
+  
+      dropZone.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.onchange = e => handleFiles(e.target.files);
+        input.click();
+      });
+  
+      function handleFiles(files) {
+        Array.from(files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const fileContent = e.target.result;
+            // Encrypt the file content
+            const encrypted = CryptoJS.AES.encrypt(fileContent, patientId.value).toString();
+            
+            if (!filesDatabase[patientId.value]) {
+              filesDatabase[patientId.value] = [];
+            }
+            
+            filesDatabase[patientId.value].push({
+              name: file.name,
+              content: encrypted,
+              date: new Date().toISOString()
+            });
+            
+            updateFileList();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+  
+      function updateFileList() {
+        const id = document.getElementById('downloadPatientId').value;
+        fileList.innerHTML = '';
+        
+        if (filesDatabase[id]) {
+          filesDatabase[id].forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+              <span>${file.name}</span>
+              <button class="button" onclick="downloadFile('${file.name}', '${file.content}')">Download</button>
+            `;
+            fileList.appendChild(fileItem);
+          });
+        }
+      }
+  
+      function downloadFile(fileName, encryptedContent) {
+        const id = document.getElementById('downloadPatientId').value;
+        const decrypted = CryptoJS.AES.decrypt(encryptedContent, id).toString(CryptoJS.enc.Utf8);
+        
+        const link = document.createElement('a');
+        link.href = decrypted;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+  
+      downloadButton.addEventListener('click', updateFileList);
+    </script>
+  </body></html>

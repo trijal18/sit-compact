@@ -1,0 +1,6 @@
+Flask==2.2.2
+Flask-SQLAlchemy==3.0.0
+PyCryptodome==3.15.0
+tenseal==0.3.2  # For homomorphic encryption
+google-differential-privacy==0.1.0  # For differential privacy
+PyJWT==2.7.0  # For JWT authentication
