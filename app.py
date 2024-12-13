@@ -61,7 +61,8 @@ def download():
     
     try:
         #func to decrpt file
-        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+        sexy_file=os.path.join(app.config['SEXY_UPLOAD_FOLDER'], filename)
+        return send_from_directory(app.config['SEXY_UPLOAD_FOLDER'], filename, as_attachment=True)
     except FileNotFoundError:
         error = 'File not found'
         return render_template('download.html', error=error)

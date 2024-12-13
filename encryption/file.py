@@ -24,11 +24,10 @@ def decrypt_file(input_file_path, output_file_path):
             lines = file.readlines()  # Read the file content
             
             # Extract encrypted text and key from the file
-            encrypted_text = lines[0].replace("Encrypted Text: ", "").strip()
-            key = lines[1].replace("Encryption Key: ", "").strip()
-        
+            # encrypted_text = lines[0].replace("Encrypted Text: ", "").strip()
+            # key = lines[1].replace("Encryption Key: ", "").strip()
         # Decrypt the text using the key
-        decrypted_text = decrypt(encrypted_text, key)
+        decrypted_text = decrypt(lines, key)
         
         # Write the decrypted text to the output file
         with open(output_file_path, 'w') as file:
