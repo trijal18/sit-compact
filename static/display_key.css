@@ -9,7 +9,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;  /* Prevent scrolling */
+    /* overflow: hidden;  Prevent scrolling */
 }
 
 body {
@@ -23,7 +23,7 @@ body {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    position: fixed;  /* Fix navbar at the top */
+    position: fixed;  /* Fixed navbar at the top */
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -51,6 +51,8 @@ body {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     width: 100%;  /* Full width to fit content */
     max-width: 600px;  /* Limiting width */
+    word-wrap: break-word;  /* Ensures long text wraps within the container */
+    overflow-wrap: break-word;
 }
 
 h1 {
@@ -58,48 +60,29 @@ h1 {
     margin-bottom: 2rem;
 }
 
-input[type="file"] {
-    padding: 1rem;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+.key {
+    font-size: 0.8rem;  /* Dynamic font size based on viewport width */
+    color: #007AFF;
+    word-wrap: break-word;  /* Ensures the key wraps within the container */
+    line-height: 1;  /* Adjust line spacing for better readability */
+    max-width: 100%;  /* Prevents overflow */
+    white-space: normal;  /* Allows wrapping instead of a single line */
+    word-break: break-word;  /* Breaks long words if needed */
+    margin-bottom: 2rem;
 }
 
-input[type="submit"] {
+.nav-buttons a {
     background: #007AFF;
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.2rem;
     border-radius: 1rem;
     font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-input[type="submit"]:hover {
-    background: #0056b3;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.button {
-    background: #007AFF;
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
     text-decoration: none;
-    font-weight: 500;
     transition: all 0.3s ease;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
-.button:hover {
+.nav-buttons a:hover {
     background: #0056b3;
 }
 
@@ -113,7 +96,11 @@ input[type="submit"]:hover {
         font-size: 1.5rem;
     }
 
-    .button {
+    .key {
+        font-size: 5vw;  /* Increase font size on smaller screens for readability */
+    }
+
+    .nav-buttons a {
         padding: 0.8rem 1rem;
         font-size: 0.9rem;
     }

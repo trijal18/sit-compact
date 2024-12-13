@@ -17,10 +17,13 @@
     <div class="content">
         <div class="container">
             <h1>Download a File</h1>
-            <form method="GET" action="{{ url_for('download') }}">
-                <label for="filename">Enter filename:</label>
-                <input type="text" name="filename" id="filename" required><br><br>
-                <input type="submit" value="Download">
+            <form method="POST" action="{{ url_for('download') }}">
+                <!-- Hidden input to preserve the filename -->
+                <input type="text" name="filename" value="{{ request.args.get('filename', '') }}" placeholder="enter file name">
+            
+                <input type="text" name="key" id="key" required placeholder="enter encryption key"><br><br>
+            
+                <input type="submit" value="Submit Key">
             </form>
             {% if error %}
                 <p>{{ error }}</p>
