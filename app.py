@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, make_response
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -6,6 +6,16 @@ from bson.errors import InvalidId
 from werkzeug.security import generate_password_hash,check_password_hash
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.core.exceptions import ResourceNotFoundError
+import random, string
+import os
+from encryption.xor import encrypt,decrypt
+import json
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = 'uploads'  # Directory to temporarily save files
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the folder exists
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # Initialize Azure Blob service client using your connection string
@@ -279,12 +289,13 @@ def upload():
     return render_template('upload_file.html')
 # Route to write a file to Azure Blob Storage
 @app.route('/upload_file', methods=['POST'])
-def upload_file():
-    file_name = request.form.get('file_name')
+def upload_file(file_name,file_content):
     file_content = request.form.get('file_content')
+    file_name = request.form.get('file_name')
 
+    # Check if file_name or file_content is missing
     if not file_name or not file_content:
-        return jsonify({'error': 'File name and content are required'}), 400
+        return jsonify({'error': 'File name and content are required'}), 400   
 
     try:
         # Get a reference to the blob (file)
@@ -293,12 +304,50 @@ def upload_file():
         # Upload the blob data (file content)
         blob_client.upload_blob(file_content, overwrite=True)
 
-        return jsonify({'message': f'File {file_name} uploaded successfully'})
+        # Return success response with 200 OK and structured JSON
+        return jsonify({'message': f'File {file_name} uploaded successfully'}), 200
 
     except Exception as e:
+        # Handle exceptions and return error message with 500 status code
         return jsonify({'error': str(e)}), 500
 
+@app.route('/data_encrypt')
+def data_encrypt():
+    return render_template('upload_data.html')
+# Endpoint to upload and process a text file
+@app.route('/upload_data', methods=['POST'])
+def upload_data():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part in the request"}), 400
 
+    file = request.files['file']
+
+    if file.filename == '' or not file.filename.endswith('.txt'):
+        return jsonify({"error": "Please upload a valid .txt file"}), 400
+
+    try:
+        # Save the file temporarily
+        file_path = os.path.join("uploads", file.filename)
+        file.save(file_path)
+
+        # Use 'with open' to read the file content
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+        new_file = random_string() + ".txt"
+        # Pass the content to the processing function
+        enc_content,key=encrypt(content)
+        upload_file(new_file,enc_content)
+
+        # Delete the file after processing
+        os.remove(file_path)  
+
+    # Return the JSON response with status code 200
+        return jsonify({"message": f"key: {key} \n file_name={new_file}"})
+
+    except Exception as e:
+            return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
