@@ -3,28 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Doctor</title>
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/doctor_signup.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
 </head>
 <body>
-    <h1>Add a New Doctor</h1>
-    <form action="/doctor" method="POST">
-        <label for="name">Doctor's Name:</label>
-        <input type="text" id="name" name="name" required>
-        <br><br>
-        
-        <label for="password">Password:</label>
-        <input type="text" id="password" name="password" required>
-        <br><br>
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../static/images/cover-removebg-preview.png" alt="Compact Logo">
+        </div>
+    </header>
+    <main class="content">
+        <div class="container">
+            <h1>Add a New Doctor</h1>
+            <form action="/doctor" method="POST">
+                <label for="name">Doctor's Name:</label>
+                <input type="text" id="name" name="name" required>
+                <br><br>
+                
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" required>
+                <br><br>
 
-        <label for="speciality">Speciality:</label>
-        <input type="text" id="speciality" name="speciality" required>
-        <br><br>
+                <label for="speciality">Speciality:</label>
+                <input type="text" id="speciality" name="speciality" required>
+                <br><br>
 
-        <label for="patients">Patients (comma-separated):</label>
-        <input type="text" id="patients" name="patients">
-        <br><br>
+                <label for="patients">Patients (comma-separated):</label>
+                <input type="text" id="patients" name="patients">
+                <br><br>
 
-        <button type="submit">Add Doctor</button>
-    </form>
+                <button type="submit">Add Doctor</button>
+                <p style="margin-top: 1rem;">
+                    Already have an account? 
+                    <a href="/doctor/login" class="login-link">Login</a>
+                </p>
+            </form>
+        </div>
+    </main>
 </body>
 </html>
