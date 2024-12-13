@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Key</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .key {
+            font-size: 1.5em;
+            color: #333;
+            margin: 20px 0;
+        }
+        .nav-buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #333;
+        }
+        .nav-buttons a:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Encryption Key</h1>
+    <p class="key">{{ key }}</p>
+    <div class="nav-buttons">
+        <a href="/">Go Home</a>
+    </div>
+</body>
+</html>
