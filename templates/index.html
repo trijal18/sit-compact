@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/index.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
+</head>
+<body>
+
+    <!-- Navbar Section -->
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../static/images/cover-removebg-preview.png" alt="Compact Logo">
+        </div>
+        <nav class="navbar-links">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <svg class="pulse-icon" width="100" height="100" viewBox="0 0 100 100">
+            <path d="M50 5 L50 95 M5 50 L95 50" stroke="white" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="8"/>
+        </svg>
+        <h1>Advanced Healthcare Solutions</h1>
+        <p>Providing cutting-edge medical services with a human touch</p>
+        <div class="button-group">
+            <button class="cta" onclick="document.location.href='/login/patient'">Login as Patient</button>
+            <button class="cta" onclick="document.location.href='/login/doctor'">Login as Doctor</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-card">
+            <svg width="50" height="50" viewBox="0 0 50 50">
+                <path d="M25 5 L45 25 L25 45 L5 25 Z" fill="#2b6cb0"/>
+                <circle cx="25" cy="25" r="10" fill="white"/>
+            </svg>
+            <h3>Expert Doctors</h3>
+            <p>Access to world-class medical professionals specialized in various fields.</p>
+        </div>
+
+        <div class="feature-card">
+            <svg width="50" height="50" viewBox="0 0 50 50">
+                <rect x="10" y="10" width="30" height="30" fill="#2b6cb0" rx="5"/>
+                <path d="M20 25 L30 25 M25 20 L25 30" stroke="white" stroke-width="3"/>
+            </svg>
+            <h3>24/7 Care</h3>
+            <p>Round-the-clock medical attention and emergency services.</p>
+        </div>
+
+        <div class="feature-card">
+            <svg width="50" height="50" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="#2b6cb0"/>
+                <path d="M15 25 L22 32 L35 18" stroke="white" stroke-width="3" fill="none"/>
+            </svg>
+            <h3>Modern Technology</h3>
+            <p>State-of-the-art medical equipment and innovative treatments.</p>
+        </div>
+    </section>
+
+</body>
+</html>
