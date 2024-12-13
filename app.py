@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 
 app = Flask(__name__)
 
@@ -190,6 +190,8 @@ def get_patients():
     for patient in patients:
         patient["_id"] = str(patient["_id"])  # Convert ObjectId to string
     return jsonify(patients), 200
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
