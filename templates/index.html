@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/index.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../static/images/cover-removebg-preview.png" alt="Compact Logo">
+        </div>
+    </header>
+    <main class="content">
+        <div class="container">
+            <h1>Welcome to Compact</h1>
+            <div class="button-container">
+                <a class="button" href="{{ url_for('upload') }}">Upload a File</a>
+                <a class="button" href="{{ url_for('download') }}">Download a File</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
