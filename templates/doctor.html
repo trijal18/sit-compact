@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .error {
+            color: red;
+        }
+        .doctor-details {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 50%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Doctor Details</h1>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        <div class="doctor-details">
+            <p><strong>ID:</strong> {{ doctor._id }}</p>
+            <p><strong>Name:</strong> {{ doctor.name }}</p>
+            <p><strong>Speciality:</strong> {{ doctor.speciality }}</p>
+            <p><strong>Patients:</strong> {{ doctor.patients | join(', ') }}</p>
+        </div>
+    {% endif %}
+</body>
+</html>

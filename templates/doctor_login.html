@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Doctor</title>
+</head>
+<body>
+    <h1>Add a New Doctor</h1>
+    <form action="/doctor" method="POST">
+        <label for="name">Doctor's Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        <label for="speciality">Speciality:</label>
+        <input type="text" id="speciality" name="speciality" required>
+        <br><br>
+
+        <label for="patients">Patients (comma-separated):</label>
+        <input type="text" id="patients" name="patients">
+        <br><br>
+
+        <button type="submit">Add Doctor</button>
+    </form>
+</body>
+</html>
