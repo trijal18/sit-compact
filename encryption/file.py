@@ -9,7 +9,7 @@ def encrypt_file(input_file_path, output_file_path):
         
         # Write the encrypted text and key to the output file
         with open(output_file_path, 'w',encoding='utf-8') as file:
-            file.write(f"Encrypted Text: {encrypted_text}\n")
+            file.write(f"{encrypted_text}\n")
             # file.write(f"Encryption Key: {key}\n")
         
         return key
