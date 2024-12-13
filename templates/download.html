@@ -3,19 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download File</title>
+    <title>Compact</title>
+    <link rel="stylesheet" href="../static/download.css">
+    <link rel="icon" href="../static/images/default-removebg-preview.png">
 </head>
 <body>
-    <h1>Download a File</h1>
-    <form method="GET" action="{{ url_for('download') }}">
-        <label for="filename">Enter filename:</label>
-        <input type="text" name="filename" id="filename" required><br><br>
-        <input type="submit" value="Download">
-    </form>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <br>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <div class="navbar">
+        <div class="logo">
+            <img src="../static/images/cover-removebg-preview.png" alt="Company Logo">
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <h1>Download a File</h1>
+            <form method="GET" action="{{ url_for('download') }}">
+                <label for="filename">Enter filename:</label>
+                <input type="text" name="filename" id="filename" required><br><br>
+                <input type="submit" value="Download">
+            </form>
+            {% if error %}
+                <p>{{ error }}</p>
+            {% endif %}
+            <br>
+            <a href="{{ url_for('index') }}" class="button">Back to Home</a>
+        </div>
+    </div>
 </body>
 </html>
