@@ -1,0 +1,134 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+}
+
+body {
+    background: #f2f2f7;
+    color: #1c1c1e;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: #ffffff;
+    padding: 1rem 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    max-width: 20%;
+    height: auto;
+}
+
+/* Content Layout */
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+.container {
+    text-align: center;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Form Styling */
+form {
+    margin-top: 1rem;
+}
+
+form label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #dedede;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+    border-color: #007AFF;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+}
+
+form button[type="submit"] {
+    background: #007AFF;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+form button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Redirect Link Styling */
+.login-link {
+    text-decoration: none;
+    color: #007AFF;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.login-link:hover {
+    color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 556px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    form input[type="text"],
+    form input[type="password"] {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    form button[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .logo img {
+        max-width: 60px;
+    }
+}
