@@ -37,6 +37,7 @@ db = client['sit-compact']
 doctor_collection = db['doctors']
 patient_collection = db['patients']
 key_collection=db['keys']
+public_keys_collection=db['public_keys']
 
 @app.route('/',methods=['GET'])
 def home():
@@ -290,13 +291,14 @@ def upload():
     return render_template('upload_file.html')
 # Route to write a file to Azure Blob Storage
 @app.route('/upload_file', methods=['POST'])
-def upload_file(file_name,file_content):
-    file_content = request.form.get('file_content')
-    file_name = request.form.get('file_name')
+def upload_file(file_name=None,file_content=None):
+    if file_name==None:
+        file_content = request.form.get('file_content')
+        file_name = request.form.get('file_name')
 
     # Check if file_name or file_content is missing
-    if not file_name or not file_content:
-        return jsonify({'error': 'File name and content are required'}), 400   
+    # if not file_name or not file_content:
+    #     return jsonify({'error': 'File name and content are required'}), 400   
 
     try:
         # Get a reference to the blob (file)
