@@ -9,6 +9,9 @@ def generate_key():
 
 # Function to encrypt a message
 def encrypt_message(key, plaintext):
+    if not isinstance(key, bytes) or len(key) not in {16, 24, 32}:
+        raise ValueError("Key must be a 16, 24, or 32-byte AES key")
+    
     # Create a random 16-byte IV (Initialization Vector)
     iv = os.urandom(16)
     
@@ -28,6 +31,11 @@ def encrypt_message(key, plaintext):
 
 # Function to decrypt a message
 def decrypt_message(key, ciphertext):
+    if not isinstance(key, bytes) or len(key) not in {16, 24, 32}:
+        raise ValueError("Key must be a 16, 24, or 32-byte AES key")
+    if not ciphertext or len(ciphertext) <= 16:
+        raise ValueError("Invalid ciphertext")
+    
     # Split the IV and the actual ciphertext
     iv = ciphertext[:16]  # The first 16 bytes are the IV
     actual_ciphertext = ciphertext[16:]
@@ -47,16 +55,19 @@ def decrypt_message(key, ciphertext):
 
 # Example Usage
 if __name__ == "__main__":
-    # Step 1: Generate a symmetric key
-    key = generate_key()
-    print("Symmetric Key:", key.hex())
-    
-    # Step 2: Encrypt a message
-    message = "This is a secret message"
-    print("Original Message:", message)
-    encrypted_message = encrypt_message(key, message)
-    print("Encrypted Message:", encrypted_message.hex())
-    
-    # Step 3: Decrypt the message
-    decrypted_message = decrypt_message(key, encrypted_message)
-    print("Decrypted Message:", decrypted_message)
+    try:
+        # Step 1: Generate a symmetric key
+        key = generate_key()
+        print("Symmetric Key:", key.hex())
+        
+        # Step 2: Encrypt a message
+        message = "This is a secret message"
+        print("Original Message:", message)
+        encrypted_message = encrypt_message(key, message)
+        print("Encrypted Message:", encrypted_message.hex())
+        
+        # Step 3: Decrypt the message
+        decrypted_message = decrypt_message(key, encrypted_message)
+        print("Decrypted Message:", decrypted_message)
+    except Exception as e:
+        print("Error:", e)

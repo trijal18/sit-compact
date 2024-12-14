@@ -40,7 +40,7 @@ patient_collection = db['patients']
 key_collection=db['keys']
 public_keys_collection=db['public_keys']
 
-KEY="cbf9b6e70a193159411bade2cbfc4d74fc155cdec26c706dfd637da875bc4236"
+KEY="ccec3e422b511be7b755cb686b683a33c00f0c41b604e85ee703605ff3dcdd91"
 
 @app.route('/',methods=['GET'])
 def home():
@@ -341,10 +341,11 @@ def upload_data():
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
-        new_file = random_string() + ".txt"
+        # random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+        # new_file = random_string() + ".txt"
+        new_file=encrypt_message(KEY,file_path)
         # Pass the content to the processing function
-        enc_content=encrypt_message(publiccontent)
+        enc_content=encrypt_message(KEY,content)
         upload_file(new_file,enc_content)
 
         # Delete the file after processing
@@ -377,7 +378,7 @@ def download_decrypted_data():
         blob_data = blob_client.download_blob()
         cipher_text = blob_data.readall()
 
-        text=decrypt(cipher_text,key)
+        text=decrypt_message(cipher_text,KEY)
         with open("decrypted_file_content.txt", "w") as f:
             f.write(text)
 
