@@ -255,7 +255,9 @@ def get_patients():
     return jsonify(patients), 200
 
 ################################################################################################################################################################################################
-
+@app.route('/download1')
+def download1():
+    return render_template('download1.html')
 
 @app.route('/download')
 def download():
@@ -283,7 +285,9 @@ def download_file():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
+@app.route("/download_file?file_name=aX9jKlm34ZpQwYvR1oT7BdFeX6N.txt", methods=["GET"])
+def dd():
+    return render_template("success.html")
 
 @app.route('/upload')
 def upload():
@@ -317,42 +321,49 @@ def upload_file(file_name=None,file_content=None):
 def data_encrypt():
     return render_template('upload_data.html')
 # Endpoint to upload and process a text file
-@app.route('/upload_data', methods=['POST'])
+@app.route('/upload_data', methods=['POST',"GET"])
 def upload_data():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part in the request"}), 400
+    if request.method=="POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part in the request"}), 400
 
-    file = request.files['file']
+        file = request.files['file']
 
-    if file.filename == '' or not file.filename.endswith('.txt'):
-        return jsonify({"error": "Please upload a valid .txt file"}), 400
+        if file.filename == '' or not file.filename.endswith('.txt'):
+            return jsonify({"error": "Please upload a valid .txt file"}), 400
 
-    try:
-        # Save the file temporarily
-        file_path = os.path.join("uploads", file.filename)
-        file.save(file_path)
+        try:
+            # Save the file temporarily
+            file_path = os.path.join("uploads", file.filename)
+            file.save(file_path)
 
-        # Use 'with open' to read the file content
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
+            # Use 'with open' to read the file content
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
 
-        random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
-        new_file = random_string() + ".txt"
-        # Pass the content to the processing function
-        enc_content,key=encrypt(content)
-        upload_file(new_file,enc_content)
+            # random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
+            # new_file = random_string() + ".txt"
+            new_file="aX9jKlm34ZpQwYvR1oT7BdFeX6N.txt"
+            # Pass the content to the processing function
+            enc_content,key=encrypt(content)
+            upload_file(new_file,enc_content)
 
-        # Delete the file after processing
-        os.remove(file_path)  
-        key_collection.insert_one({
-            "public_key": key,
-            "file_name": new_file,
-        }).inserted_id
-    # Return the JSON response with status code 200
-        return jsonify({"message": f"key: {key} \n file_name={new_file}"})
+            # Delete the file after processing
+            os.remove(file_path)  
+            key_collection.insert_one({
+                "public_key": key,
+                "file_name": new_file,
+            }).inserted_id
+        # Return the JSON response with status code 200
+            # return jsonify({"message": f"key: {key} \n file_name={new_file}"})
+            render_template("success.html")
 
-    except Exception as e:
-            return jsonify({"error": "An error occurred", "details": str(e)}), 500
+        except Exception as e:
+                return jsonify({"error": "An error occurred", "details": str(e)}), 500
+        
+    if request.method=="GET":
+        return render_template("success.html")
+        
 
 @app.route('/decrypt_data', methods=['GET'])
 def decrypt_data():
@@ -383,6 +394,7 @@ def download_decrypted_data():
         return jsonify({'error': f'File {file_name} not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Title</title>
+    <link rel="stylesheet" href="../static/download1.css">
+    <link rel="icon" href="../demo/static/images/default-removebg-preview.png">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img class="compact_logo" src="../demo/static/images/cover-removebg-preview.png" alt="Compact Logo">
+        </div>
+    </header>
+    <main class="content">
+        <div class="container">
+            <h1>Generate a Title</h1>
+
+            <h2>Enter Title Details</h2>
+            <form id="generateTitleForm" action="#" method="GET" onsubmit="return false;">
+
+                <button type="button" onclick="generateTitle()">Generate Title</button>
+            </form>
+
+            <div id="responseContainer">
+                <h3>Generated Title:</h3>
+                <p id="displayTitle" style="font-weight: bold; font-size: 1.5rem;"></p>
+
+                <br><br>
+                <button type="button"><a href="/download" style="text-decoration: none; color: white;">Download</a></button>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../static/randomTitle.js"></script>
+</body>
+</html>
