@@ -1,3 +1,4 @@
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +11,7 @@ body {
     color: #1c1c1e;
 }
 
+/* Navbar Styling */
 .navbar {
     background: #ffffff;
     padding: 1rem 1rem;
@@ -26,11 +28,13 @@ body {
     height: auto;
 }
 
+/* Content Layout */
 .content {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    padding: 1rem;
 }
 
 .container {
@@ -39,6 +43,8 @@ body {
     padding: 2.5rem;
     border-radius: 1.5rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
 }
 
 h1 {
@@ -46,52 +52,59 @@ h1 {
     margin-bottom: 2rem;
 }
 
-input[type="file"] {
-    padding: 1rem;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+/* Form Styling */
+form {
+    margin-top: 1rem;
 }
 
-input[type="submit"] {
+form label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+form input[type="text"] {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #dedede;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+form input[type="text"]:focus {
+    border-color: #007AFF;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+}
+
+form button[type="submit"] {
     background: #007AFF;
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 1rem 2rem;
+    border: none;
     border-radius: 1rem;
-    font-weight: 500;
     font-size: 1rem;
     cursor: pointer;
-    border: none;
     transition: all 0.3s ease;
+    margin-top: 1rem;
 }
 
-input[type="submit"]:hover {
+form button[type="submit"]:hover {
     background: #0056b3;
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.button {
-    background: #007AFF;
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
+.login-link {
     text-decoration: none;
+    color: #007AFF;
     font-weight: 500;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+    transition: color 0.3s ease;
 }
 
-.button:hover {
-    background: #0056b3;
+.login-link:hover {
+    color: #0056b3;
 }
 
-/* Responsive Styles */
+/* Responsive Design */
 @media (max-width: 556px) {
     .container {
         padding: 1.5rem;
@@ -101,8 +114,13 @@ input[type="submit"]:hover {
         font-size: 1.5rem;
     }
 
-    .button {
-        padding: 0.8rem 1rem;
+    form input[type="text"] {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    form button[type="submit"] {
+        padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
     }
 
