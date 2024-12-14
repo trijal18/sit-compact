@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, make_response
+from flask import Flask, request, jsonify, render_template, redirect, make_response, send_file
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -36,6 +36,7 @@ db = client['sit-compact']
 # Create collection named data if it doesn't exist already 
 doctor_collection = db['doctors']
 patient_collection = db['patients']
+key_collection=db['keys']
 
 @app.route('/',methods=['GET'])
 def home():
@@ -342,12 +343,45 @@ def upload_data():
 
         # Delete the file after processing
         os.remove(file_path)  
-
+        key_collection.insert_one({
+            "public_key": key,
+            "file_name": new_file,
+        }).inserted_id
     # Return the JSON response with status code 200
         return jsonify({"message": f"key: {key} \n file_name={new_file}"})
 
     except Exception as e:
             return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+@app.route('/decrypt_data', methods=['GET'])
+def decrypt_data():
+    # Renders the HTML form where the user will input file name and key
+    return render_template('download_data.html')
+
+@app.route('/download_data', methods=['POST'])
+def download_decrypted_data():
+    file_name = request.form.get('file_name')
+    key = request.form.get('key').encode('utf-8')  # Ensure the key is in bytes
+
+    try:
+        # Get a reference to the blob (file)
+        blob_client = blob_service_client.get_blob_client(container=CONTAINER_NAME, blob=file_name)
+
+        # Download the encrypted blob data
+        blob_data = blob_client.download_blob()
+        cipher_text = blob_data.readall()
+
+        text=decrypt(cipher_text,key)
+        with open("decrypted_file_content.txt", "w") as f:
+            f.write(text)
+
+        # Return the decrypted file as a downloadable response
+        return send_file("decrypted_file_content.txt", as_attachment=True, download_name=file_name)
+
+    except ResourceNotFoundError:
+        return jsonify({'error': f'File {file_name} not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
