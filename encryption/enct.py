@@ -134,5 +134,5 @@ def main():
     print("\nDecrypted Message:", decrypted_message.decode('utf-8'))
     assert message == decrypted_message.decode('utf-8'), "Decryption failed!"
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()

@@ -8,8 +8,9 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.core.exceptions import ResourceNotFoundError
 import random, string
 import os
-from encryption.xor import encrypt,decrypt
-import json
+# from encryption.xor import encrypt,decrypt
+# from encryption.en import decrypt_message, encrypt_message
+from encryption.basic import decrypt_message, encrypt_message
 
 app = Flask(__name__)
 
@@ -38,6 +39,8 @@ doctor_collection = db['doctors']
 patient_collection = db['patients']
 key_collection=db['keys']
 public_keys_collection=db['public_keys']
+
+KEY="cbf9b6e70a193159411bade2cbfc4d74fc155cdec26c706dfd637da875bc4236"
 
 @app.route('/',methods=['GET'])
 def home():
@@ -276,8 +279,9 @@ def download_file():
         # Download the blob data
         blob_data = blob_client.download_blob()
         file_content = blob_data.readall().decode('utf-8')
+        de=decrypt_message(KEY,file_content)
 
-        return jsonify({'file_content': file_content})
+        return jsonify({'file_content': file_content,'de':de})
 
     except ResourceNotFoundError:
         return jsonify({'error': f'File {file_name} not found'}), 404
@@ -340,17 +344,17 @@ def upload_data():
         random_string = lambda n=10: ''.join(random.choices(string.ascii_letters + string.digits, k=n))
         new_file = random_string() + ".txt"
         # Pass the content to the processing function
-        enc_content,key=encrypt(content)
+        enc_content=encrypt_message(publiccontent)
         upload_file(new_file,enc_content)
 
         # Delete the file after processing
         os.remove(file_path)  
-        key_collection.insert_one({
-            "public_key": key,
-            "file_name": new_file,
-        }).inserted_id
+        # key_collection.insert_one({
+        #     "public_key": key,
+        #     "file_name": new_file,
+        # }).inserted_id
     # Return the JSON response with status code 200
-        return jsonify({"message": f"key: {key} \n file_name={new_file}"})
+        return jsonify({"message": f"file_name={new_file}"})
 
     except Exception as e:
             return jsonify({"error": "An error occurred", "details": str(e)}), 500
@@ -387,3 +391,4 @@ def download_decrypted_data():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
